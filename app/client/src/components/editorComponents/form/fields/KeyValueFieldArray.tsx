@@ -15,6 +15,7 @@ import Text, { Case, TextType } from "components/ads/Text";
 import { Classes } from "components/ads/common";
 import DynamicDropdownField from "./DynamicDropdownField";
 import { Colors } from "constants/Colors";
+import { AutocompleteDataType } from "utils/autocomplete/TernServer";
 
 enum MultiPartOptionTypes {
   TEXT = "Text",
@@ -36,6 +37,7 @@ const MULTI_PART_DROPDOWN_OPTIONS: MULTI_PART_DROPDOWN_OPTION[] = [
     value: "FILE",
   },
 ];
+
 
 type CustomStack = {
   removeTopPadding?: boolean;
@@ -125,6 +127,7 @@ const DynamicDropdownFieldWrapper = styled.div`
 const expected = {
   type: FIELD_VALUES.API_ACTION.params,
   example: "",
+  autocompleteDataType: AutocompleteDataType.STRING,
 };
 
 function KeyValueRow(props: Props & WrappedFieldArrayProps) {
