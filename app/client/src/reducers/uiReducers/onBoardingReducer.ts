@@ -10,7 +10,7 @@ import {
 import { createReducer } from "utils/AppsmithUtils";
 
 const initialState: OnboardingState = {
-  currentStep: OnboardingStep.NONE,
+  currentStep: OnboardingStep.WELCOME,
   currentSubstep: 0,
   showOnboardingLoader: false,
   showWelcomeHelper: false,
@@ -27,6 +27,8 @@ const initialState: OnboardingState = {
     },
     allowMinimize: false,
   },
+  showOnboardingChecklist: false,
+  inOnboardingWidgetSelection: false,
 };
 
 export interface OnboardingState {
@@ -41,6 +43,8 @@ export interface OnboardingState {
   showHelper: boolean;
   helperStepConfig: OnboardingHelperConfig;
   showingIndicator: OnboardingStep;
+  showOnboardingChecklist: boolean;
+  inOnboardingWidgetSelection: boolean;
 }
 
 const onboardingReducer = createReducer(initialState, {
@@ -142,6 +146,24 @@ const onboardingReducer = createReducer(initialState, {
     return {
       ...state,
       ...initialState,
+    };
+  },
+  [ReduxActionTypes.TOGGLE_ONBOARDING_CHECKLIST]: (
+    state: OnboardingState,
+    action: ReduxAction<boolean>,
+  ) => {
+    return {
+      ...state,
+      showOnboardingChecklist: action.payload,
+    };
+  },
+  [ReduxActionTypes.TOGGLE_ONBOARDING_WIDGET_SELECTION]: (
+    state: OnboardingState,
+    action: ReduxAction<boolean>,
+  ) => {
+    return {
+      ...state,
+      inOnboardingWidgetSelection: action.payload,
     };
   },
 });

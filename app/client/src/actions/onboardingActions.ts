@@ -71,3 +71,17 @@ export const showEndOnboardingHelper = () => {
     type: ReduxActionTypes.SHOW_END_ONBOARDING_HELPER,
   };
 };
+
+export const toggleOnboardingChecklist = (payload: boolean) => {
+  return {
+    type: ReduxActionTypes.TOGGLE_ONBOARDING_CHECKLIST,
+    payload,
+  };
+};
+
+export const toggleInOnboardingWidgetSelection = (payload: boolean) => {
+  return {
+    type: ReduxActionTypes.TOGGLE_ONBOARDING_WIDGET_SELECTION,
+    payload,
+  };
+};

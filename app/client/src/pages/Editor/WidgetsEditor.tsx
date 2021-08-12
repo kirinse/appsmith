@@ -26,6 +26,16 @@ import { useDynamicAppLayout } from "utils/hooks/useDynamicAppLayout";
 import Debugger from "components/editorComponents/Debugger";
 import { closePropertyPane, closeTableFilterPane } from "actions/widgetActions";
 import { useWidgetSelection } from "utils/hooks/useWidgetSelection";
+import {
+  getInOnboarding,
+  getOnboardingCheckListVisibility,
+} from "selectors/onboardingSelectors";
+import OnboardingAction from "./Explorer/Onboarding/Action";
+import {
+  getGetStarted,
+  getIsOnboardingWidgetSelection,
+} from "selectors/entitiesSelector";
+import OnboardingChecklist from "./Explorer/Onboarding/Checklist";
 
 const EditorWrapper = styled.div`
   display: flex;
@@ -64,6 +74,11 @@ function WidgetsEditor() {
   const currentPageId = useSelector(getCurrentPageId);
   const currentPageName = useSelector(getCurrentPageName);
   const currentApp = useSelector(getCurrentApplication);
+  const showOnboardingChecklist = useSelector(getOnboardingCheckListVisibility);
+  const enableGetStarted = useSelector(getGetStarted);
+  const isOnboardingWidgetSelection = useSelector(
+    getIsOnboardingWidgetSelection,
+  );
   useDynamicAppLayout();
   useEffect(() => {
     PerformanceTracker.stopTracking(PerformanceTransactionName.CLOSE_SIDE_PANE);
@@ -123,13 +138,21 @@ function WidgetsEditor() {
   PerformanceTracker.stopTracking();
   return (
     <EditorContextProvider>
-      <EditorWrapper onClick={handleWrapperClick}>
-        <MainContainerLayoutControl />
-        <CanvasContainer className={getCanvasClassName()} key={currentPageId}>
-          {node}
-        </CanvasContainer>
-        <Debugger />
-      </EditorWrapper>
+      {enableGetStarted && !isOnboardingWidgetSelection ? (
+        showOnboardingChecklist ? (
+          <OnboardingChecklist />
+        ) : (
+          <OnboardingAction />
+        )
+      ) : (
+        <EditorWrapper onClick={handleWrapperClick}>
+          <MainContainerLayoutControl />
+          <CanvasContainer className={getCanvasClassName()} key={currentPageId}>
+            {node}
+          </CanvasContainer>
+          <Debugger />
+        </EditorWrapper>
+      )}
     </EditorContextProvider>
   );
 }
