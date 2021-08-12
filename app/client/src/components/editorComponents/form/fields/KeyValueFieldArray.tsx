@@ -38,7 +38,6 @@ const MULTI_PART_DROPDOWN_OPTIONS: MULTI_PART_DROPDOWN_OPTION[] = [
   },
 ];
 
-
 type CustomStack = {
   removeTopPadding?: boolean;
 };
