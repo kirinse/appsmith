@@ -16,8 +16,6 @@ import ProfileImage from "./ProfileImage";
 import { PopperModifiers } from "@blueprintjs/core";
 import { PROFILE } from "constants/routes";
 import UserApi from "api/UserApi";
-import { useDispatch } from "react-redux";
-
 type TagProps = CommonComponentProps & {
   onClick?: (text: string) => void;
   userName?: string;
@@ -84,7 +82,6 @@ export default function ProfileDropdown(props: TagProps) {
       userName={props.name || props.userName}
     />
   );
-  const dispatch = useDispatch();
 
   return (
     <>

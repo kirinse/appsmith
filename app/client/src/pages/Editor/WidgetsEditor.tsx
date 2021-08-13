@@ -27,10 +27,6 @@ import { useDynamicAppLayout } from "utils/hooks/useDynamicAppLayout";
 import Debugger from "components/editorComponents/Debugger";
 import { closePropertyPane, closeTableFilterPane } from "actions/widgetActions";
 import { useWidgetSelection } from "utils/hooks/useWidgetSelection";
-import {
-  getInOnboarding,
-  getOnboardingCheckListVisibility,
-} from "selectors/onboardingSelectors";
 import OnboardingTasks from "./Explorer/Onboarding/Tasks";
 import {
   getEnableGetStarted,

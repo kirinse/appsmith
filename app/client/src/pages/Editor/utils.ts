@@ -1,8 +1,6 @@
 import { getDependenciesFromInverseDependencies } from "components/editorComponents/Debugger/helpers";
 import _, { debounce } from "lodash";
 import ReactDOM from "react-dom";
-import { useSelector } from "react-redux";
-import { AppState } from "reducers";
 import ResizeObserver from "resize-observer-polyfill";
 
 export const draggableElement = (

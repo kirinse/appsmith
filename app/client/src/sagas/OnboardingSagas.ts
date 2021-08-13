@@ -5,7 +5,6 @@ import { Plugin } from "api/PluginApi";
 import {
   ReduxAction,
   ReduxActionErrorTypes,
-  ReduxActionType,
   ReduxActionTypes,
   WidgetReduxActionTypes,
 } from "constants/ReduxActionConstants";

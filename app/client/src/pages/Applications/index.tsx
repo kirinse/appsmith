@@ -86,7 +86,6 @@ import { SIGNUP_SUCCESS_URL } from "constants/routes";
 import {
   setOnboardingFormInProgress,
   getOnboardingFormInProgress,
-  setEnableFirstTimeUserExperience,
 } from "utils/storage";
 
 import { getIsSafeRedirectURL } from "utils/helpers";

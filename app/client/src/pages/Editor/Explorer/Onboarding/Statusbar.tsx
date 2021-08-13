@@ -1,5 +1,4 @@
 import { Icon } from "@blueprintjs/core";
-import { toggleOnboardingChecklist } from "actions/onboardingActions";
 import { ReduxActionTypes } from "constants/ReduxActionConstants";
 import { getOnboardingCheckListUrl } from "constants/routes";
 import { useIsWidgetActionConnectionPresent } from "pages/Editor/utils";
@@ -141,7 +140,7 @@ const useStatus = (): { percentage: number; content: string } => {
   };
 };
 
-function Statusbar(props: any) {
+function Statusbar() {
   const dispatch = useDispatch();
   const applicationId = useSelector(getCurrentApplicationId);
   const pageId = useSelector(getCurrentPageId);

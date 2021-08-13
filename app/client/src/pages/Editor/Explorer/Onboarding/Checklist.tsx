@@ -11,7 +11,6 @@ import {
   getDatasources,
 } from "selectors/entitiesSelector";
 import { getCurrentThemeDetails } from "selectors/themeSelectors";
-import _ from "lodash";
 import { useIsWidgetActionConnectionPresent } from "pages/Editor/utils";
 import { getEvaluationInverseDependencyMap } from "selectors/dataTreeSelectors";
 import {
@@ -102,7 +101,7 @@ const StyledLink = styled(Link)`
   }
 `;
 
-export default function OnboardingChecklist(props: any) {
+export default function OnboardingChecklist() {
   const dispatch = useDispatch();
   const datasources = useSelector(getDatasources);
   const actions = useSelector(getActions);
