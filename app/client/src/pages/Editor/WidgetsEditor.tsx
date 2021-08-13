@@ -1,4 +1,4 @@
-import React, { useEffect, ReactNode, useCallback } from "react";
+import React, { useEffect, ReactNode, useCallback, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 import Canvas from "./Canvas";
@@ -7,6 +7,7 @@ import {
   getCurrentPageId,
   getCanvasWidgetDsl,
   getCurrentPageName,
+  getCurrentApplicationId,
 } from "selectors/editorSelectors";
 import Centered from "components/designSystems/appsmith/CenteredWrapper";
 import EditorContextProvider from "components/editorComponents/EditorContextProvider";
@@ -30,12 +31,16 @@ import {
   getInOnboarding,
   getOnboardingCheckListVisibility,
 } from "selectors/onboardingSelectors";
-import OnboardingAction from "./Explorer/Onboarding/Action";
+import OnboardingTasks from "./Explorer/Onboarding/Tasks";
 import {
-  getGetStarted,
+  getEnableGetStarted,
   getIsOnboardingWidgetSelection,
 } from "selectors/entitiesSelector";
-import OnboardingChecklist from "./Explorer/Onboarding/Checklist";
+import {
+  getEnableFirstTimeUserExperience,
+  getFirstTimeUserExperienceApplicationId,
+} from "utils/storage";
+import { getCurrentUser } from "selectors/usersSelectors";
 
 const EditorWrapper = styled.div`
   display: flex;
@@ -74,11 +79,16 @@ function WidgetsEditor() {
   const currentPageId = useSelector(getCurrentPageId);
   const currentPageName = useSelector(getCurrentPageName);
   const currentApp = useSelector(getCurrentApplication);
-  const showOnboardingChecklist = useSelector(getOnboardingCheckListVisibility);
-  const enableGetStarted = useSelector(getGetStarted);
+  const enableGetStarted = useSelector(getEnableGetStarted);
+  const applicationId = useSelector(getCurrentApplicationId);
+  const [
+    enableFirstTimeUserExperience,
+    setEnableFirstTimeUserExperience,
+  ] = useState(false);
   const isOnboardingWidgetSelection = useSelector(
     getIsOnboardingWidgetSelection,
   );
+  const currentUser = useSelector(getCurrentUser);
   useDynamicAppLayout();
   useEffect(() => {
     PerformanceTracker.stopTracking(PerformanceTransactionName.CLOSE_SIDE_PANE);
@@ -113,6 +123,16 @@ function WidgetsEditor() {
     }
   }, [isFetchingPage, selectWidget]);
 
+  useEffect(() => {
+    (async () => {
+      const enable = await getEnableFirstTimeUserExperience();
+      const enabledApplicationId = await getFirstTimeUserExperienceApplicationId();
+      if (enable && enabledApplicationId == applicationId) {
+        setEnableFirstTimeUserExperience(true);
+      }
+    })();
+  }, [currentUser]);
+
   const handleWrapperClick = useCallback(() => {
     focusWidget && focusWidget();
     deselectAll && deselectAll();
@@ -138,12 +158,10 @@ function WidgetsEditor() {
   PerformanceTracker.stopTracking();
   return (
     <EditorContextProvider>
-      {enableGetStarted && !isOnboardingWidgetSelection ? (
-        showOnboardingChecklist ? (
-          <OnboardingChecklist />
-        ) : (
-          <OnboardingAction />
-        )
+      {enableFirstTimeUserExperience &&
+      enableGetStarted &&
+      !isOnboardingWidgetSelection ? (
+        <OnboardingTasks />
       ) : (
         <EditorWrapper onClick={handleWrapperClick}>
           <MainContainerLayoutControl />

@@ -7,6 +7,7 @@ export type CreateApplicationFormValues = {
   orgId: string;
   colorCode?: AppColorCode;
   appName?: AppIconName;
+  skipGeneratePage?: boolean;
 };
 
 export const CREATE_APPLICATION_FORM_NAME_FIELD = "applicationName";

@@ -59,7 +59,12 @@ import {
 } from "selectors/editorSelectors";
 import { showCompletionDialog } from "./OnboardingSagas";
 
-import { deleteRecentAppEntities } from "utils/storage";
+import {
+  deleteRecentAppEntities,
+  getEnableFirstTimeUserExperience,
+  getFirstTimeUserExperienceApplicationId,
+  setFirstTimeUserExperienceApplicationId,
+} from "utils/storage";
 import { reconnectWebsocket as reconnectWebsocketAction } from "actions/websocketActions";
 import { getCurrentOrg } from "selectors/organizationSelectors";
 import { Org } from "constants/orgConstants";
@@ -455,10 +460,25 @@ export function* createApplicationSaga(
             application,
           },
         });
-        const pageURL = getGenerateTemplateURL(
-          application.id,
-          application.defaultPageId,
+        const isFirstTimeUserExperienceEnabled = yield call(
+          getEnableFirstTimeUserExperience,
         );
+        const FirstTimeUserExperienceApplicationId = yield call(
+          getFirstTimeUserExperienceApplicationId,
+        );
+        let pageURL;
+        if (
+          isFirstTimeUserExperienceEnabled &&
+          FirstTimeUserExperienceApplicationId == ""
+        ) {
+          yield setFirstTimeUserExperienceApplicationId(application.id);
+          pageURL = BUILDER_PAGE_URL(application.id, application.defaultPageId);
+        } else {
+          pageURL = getGenerateTemplateURL(
+            application.id,
+            application.defaultPageId,
+          );
+        }
         history.push(pageURL);
 
         // subscribe to newly created application

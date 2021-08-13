@@ -3,7 +3,9 @@ import DatasourcesApi from "api/DatasourcesApi";
 import { Datasource } from "entities/Datasource";
 import { Plugin } from "api/PluginApi";
 import {
+  ReduxAction,
   ReduxActionErrorTypes,
+  ReduxActionType,
   ReduxActionTypes,
   WidgetReduxActionTypes,
 } from "constants/ReduxActionConstants";
@@ -28,6 +30,8 @@ import { getDataTree } from "selectors/dataTreeSelectors";
 import { getCurrentOrgId } from "selectors/organizationSelectors";
 import {
   getOnboardingState,
+  setEnableFirstTimeUserExperience,
+  setFirstTimeUserExperienceApplicationId,
   setOnboardingState,
   setOnboardingWelcomeState,
 } from "utils/storage";
@@ -887,6 +891,13 @@ export default function* onboardingSagas() {
   }
 }
 
+function* toggleFirstTimeUserExperience(
+  action: ReduxAction<{ flag: boolean; applicationId: string }>,
+) {
+  yield setEnableFirstTimeUserExperience(action.payload.flag);
+  yield setFirstTimeUserExperienceApplicationId(action.payload.applicationId);
+}
+
 function* onboardingActionSagas() {
   yield all([
     takeLatest(
@@ -931,6 +942,10 @@ function* onboardingActionSagas() {
     takeLatest(
       ReduxActionTypes.ONBOARDING_CREATE_APPLICATION,
       createApplication,
+    ),
+    takeLatest(
+      ReduxActionTypes.TOGGLE_FIRST_TIME_USER_EXPERIENCE,
+      toggleFirstTimeUserExperience,
     ),
   ]);
 }

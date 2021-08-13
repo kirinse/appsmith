@@ -26,6 +26,7 @@ import {
   getProviderTemplatesURL,
   getGenerateTemplateURL,
   getGenerateTemplateFormURL,
+  getOnboardingCheckListUrl,
 } from "constants/routes";
 import styled from "styled-components";
 import { useShowPropertyPane } from "utils/hooks/dragResizeHooks";
@@ -40,6 +41,7 @@ const SentryRoute = Sentry.withSentryRouting(Route);
 
 import { SaaSEditorRoutes } from "./SaaSEditor/routes";
 import { useWidgetSelection } from "utils/hooks/useWidgetSelection";
+import OnboardingChecklist from "./Explorer/Onboarding/Checklist";
 
 const Wrapper = styled.div<{ isVisible: boolean }>`
   position: absolute;
@@ -123,6 +125,7 @@ class EditorsRouter extends React.Component<
   };
 
   render(): React.ReactNode {
+    console.log("test", getGenerateTemplateFormURL());
     return (
       <Wrapper isVisible={this.state.isVisible} onClick={this.handleClose}>
         <PaneDrawer

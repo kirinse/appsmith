@@ -86,9 +86,11 @@ import { SIGNUP_SUCCESS_URL } from "constants/routes";
 import {
   setOnboardingFormInProgress,
   getOnboardingFormInProgress,
+  setEnableFirstTimeUserExperience,
 } from "utils/storage";
 
 import { getIsSafeRedirectURL } from "utils/helpers";
+import { getCurrentThemeDetails } from "selectors/themeSelectors";
 
 const OrgDropDown = styled.div`
   display: flex;
@@ -881,7 +883,12 @@ function ApplicationsSection(props: any) {
 }
 type ApplicationProps = {
   applicationList: ApplicationPayload[];
-  createApplication: (appName: string) => void;
+  createApplication: (
+    applicationName: string,
+    orgId?: string,
+    color?: string,
+    icon?: string,
+  ) => void;
   searchApplications: (keyword: string) => void;
   isCreatingApplication: creatingApplicationMap;
   isFetchingApplications: boolean;
@@ -893,6 +900,8 @@ type ApplicationProps = {
   userOrgs: any;
   currentUser?: User;
   searchKeyword: string | undefined;
+  theme: any;
+  EnableFirstTimeUserExperience: () => void;
 };
 
 const getIsFromSignup = () => {
@@ -940,12 +949,27 @@ class Applications extends Component<
     }
   };
 
-  redirectUsingQueryParam = () => {
+  redirectUsingQueryParam = async () => {
     const urlObject = new URL(window.location.href);
     const redirectUrl = urlObject?.searchParams.get("redirectUrl");
     if (redirectUrl) {
       try {
-        if (getIsSafeRedirectURL(redirectUrl)) {
+        if (window.location.pathname == SIGNUP_SUCCESS_URL) {
+          this.props.EnableFirstTimeUserExperience();
+          const color = getRandomPaletteColor(
+            this.props.theme.colors.appCardColors,
+          );
+          const icon =
+            AppIconCollection[
+              Math.floor(Math.random() * AppIconCollection.length)
+            ];
+          this.props.createApplication(
+            "My first application",
+            this.props.currentUser?.currentOrganizationId,
+            color,
+            icon,
+          );
+        } else if (getIsSafeRedirectURL(redirectUrl)) {
           window.location.replace(redirectUrl);
         }
       } catch (e) {
@@ -995,16 +1019,26 @@ const mapStateToProps = (state: AppState) => ({
   userOrgs: getUserApplicationsOrgsList(state),
   currentUser: getCurrentUser(state),
   searchKeyword: getApplicationSearchKeyword(state),
+  theme: getCurrentThemeDetails(state),
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-  getAllApplication: () =>
-    dispatch({ type: ReduxActionTypes.GET_ALL_APPLICATION_INIT }),
-  createApplication: (appName: string) => {
+  getAllApplication: () => {
+    dispatch({ type: ReduxActionTypes.GET_ALL_APPLICATION_INIT });
+  },
+  createApplication: (
+    applicationName: string,
+    orgId?: string,
+    color?: string,
+    icon?: string,
+  ) => {
     dispatch({
       type: ReduxActionTypes.CREATE_APPLICATION_INIT,
       payload: {
-        name: appName,
+        applicationName,
+        orgId,
+        icon,
+        color,
       },
     });
   },
@@ -1013,6 +1047,15 @@ const mapDispatchToProps = (dispatch: any) => ({
       type: ReduxActionTypes.SEARCH_APPLICATIONS,
       payload: {
         keyword,
+      },
+    });
+  },
+  EnableFirstTimeUserExperience: () => {
+    dispatch({
+      type: ReduxActionTypes.TOGGLE_FIRST_TIME_USER_EXPERIENCE,
+      payload: {
+        flag: true,
+        applicationId: "",
       },
     });
   },

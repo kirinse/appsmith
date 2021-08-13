@@ -4,9 +4,10 @@ import WidgetsEditor from "./WidgetsEditor";
 import styled from "styled-components";
 import Sidebar from "components/editorComponents/Sidebar";
 import { Route, Switch } from "react-router";
-import { BUILDER_URL } from "constants/routes";
+import { BUILDER_CHECKLIST_URL, BUILDER_URL } from "constants/routes";
 
 import * as Sentry from "@sentry/react";
+import OnboardingChecklist from "./Explorer/Onboarding/Checklist";
 const SentryRoute = Sentry.withSentryRouting(Route);
 
 const Container = styled.div`
@@ -27,6 +28,11 @@ function MainContainer() {
       <EditorContainer>
         <Switch>
           <SentryRoute component={WidgetsEditor} exact path={BUILDER_URL} />
+          <SentryRoute
+            component={OnboardingChecklist}
+            exact
+            path={BUILDER_CHECKLIST_URL}
+          />
           <SentryRoute component={EditorsRouter} />
         </Switch>
       </EditorContainer>

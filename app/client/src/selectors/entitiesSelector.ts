@@ -464,9 +464,7 @@ export const widgetsMapWithParentModalId = (state: AppState) => {
     : getCanvasWidgetsWithParentId(state);
 };
 
-const test = getEvaluationInverseDependencyMap;
-
-export const getGetStarted = createSelector(
+export const getEnableGetStarted = createSelector(
   getDatasources,
   getActions,
   getCanvasWidgets,
