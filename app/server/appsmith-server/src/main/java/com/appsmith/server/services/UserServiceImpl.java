@@ -299,9 +299,7 @@ public class UserServiceImpl extends BaseService<UserRepository, User, String> i
 
         return passwordResetTokenRepository
                 .findByEmail(emailTokenDTO.getEmail())
-                .switchIfEmpty(Mono.error(new AppsmithException(
-                        AppsmithError.NO_RESOURCE_FOUND, FieldName.EMAIL, emailTokenDTO.getEmail()
-                )))
+                .switchIfEmpty(Mono.error(new AppsmithException(AppsmithError.INVALID_PASSWORD_RESET)))
                 .map(obj -> this.passwordEncoder.matches(emailTokenDTO.getToken(), obj.getTokenHash()));
     }
 
@@ -324,15 +322,11 @@ public class UserServiceImpl extends BaseService<UserRepository, User, String> i
 
         return passwordResetTokenRepository
                 .findByEmail(emailTokenDTO.getEmail())
-                .switchIfEmpty(Mono.error(new AppsmithException(
-                        AppsmithError.NO_RESOURCE_FOUND, FieldName.EMAIL, emailTokenDTO.getEmail()
-                )))
+                .switchIfEmpty(Mono.error(new AppsmithException(AppsmithError.INVALID_PASSWORD_RESET)))
                 .map(passwordResetToken -> {
                     boolean matches = this.passwordEncoder.matches(emailTokenDTO.getToken(), passwordResetToken.getTokenHash());
                     if (!matches) {
-                        throw new AppsmithException(
-                                AppsmithError.GENERIC_BAD_REQUEST, FieldName.TOKEN
-                        );
+                        throw new AppsmithException(AppsmithError.GENERIC_BAD_REQUEST, FieldName.TOKEN);
                     } else {
                         return emailTokenDTO.getEmail();
                     }
