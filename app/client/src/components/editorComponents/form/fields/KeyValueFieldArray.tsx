@@ -16,27 +16,7 @@ import { Classes } from "components/ads/common";
 import DynamicDropdownField from "./DynamicDropdownField";
 import { Colors } from "constants/Colors";
 import { AutocompleteDataType } from "utils/autocomplete/TernServer";
-
-enum MultiPartOptionTypes {
-  TEXT = "Text",
-  FILE = "File",
-}
-
-interface MULTI_PART_DROPDOWN_OPTION {
-  label: MultiPartOptionTypes;
-  value: string;
-}
-
-const MULTI_PART_DROPDOWN_OPTIONS: MULTI_PART_DROPDOWN_OPTION[] = [
-  {
-    label: MultiPartOptionTypes.TEXT,
-    value: "TEXT",
-  },
-  {
-    label: MultiPartOptionTypes.FILE,
-    value: "FILE",
-  },
-];
+import { MULTI_PART_DROPDOWN_OPTIONS } from "constants/ApiEditorConstants";
 
 type CustomStack = {
   removeTopPadding?: boolean;
